@@ -1,6 +1,6 @@
 ![Dopamine](Dopamine.full.png)
 
-# Dopamine (for Windows)
+# Dopamine - Caffinated (Windows Only for now?)
 
 Dopamine is an audio player which tries to make organizing and listening to music as simple and pretty as possible. It is written in C# and is powered by the [CSCore sound library](https://github.com/filoe/cscore).
 
@@ -8,12 +8,19 @@ More information and downloads are available at [https://www.digimezzo.com](http
 
 This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the <a href=http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>LGPLv2.1</a> and its source can be downloaded <a href=https://github.com/FFmpeg/FFmpeg>here</a>.
 
+## Caffinated?
+
+This is a fork created with the intention of offering some additional minor features and potentially upgrading to .net 8 for better cross-platform compatibility.
+
+Current additions:
+
+- Improved Discord RPC with album art fetched from Last.FM
+- Package security upgrades
+
 [![Release](https://img.shields.io/github/release/digimezzo/Dopamine-windows.svg?style=flat-square)](https://github.com/digimezzo/Dopamine-windows/releases/latest)
 [![Issues](https://img.shields.io/github/issues/digimezzo/Dopamine-windows.svg?style=flat-square)](https://github.com/digimezzo/Dopamine-windows/issues)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MQALEWTEZ7HX8)
 
-<a href='https://ko-fi.com/S6S11K63U' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi1.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
-
+## [Please check out Dopamine 3!](https://github.com/digimezzo/dopamine)
 
 ![Dopaminescreenshot](Dopamine.screenshot.png)
 
