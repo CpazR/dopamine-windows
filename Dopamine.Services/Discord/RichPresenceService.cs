@@ -4,14 +4,17 @@ using Digimezzo.Foundation.Core.Utils;
 using DiscordRPC;
 using Dopamine.Core.Base;
 using Dopamine.Services.Playback;
+using IF.Lastfm.Core.Api;
 using System;
+using System.Configuration;
 
 namespace Dopamine.Services.Discord
 {
     public class RichPresenceService : IRichPresenceService
     {
         private DiscordRpcClient client;
-        private IPlaybackService playbackService;
+        private LastfmClient lastfmClient;
+        private readonly IPlaybackService playbackService;
 
         public RichPresenceService(IPlaybackService playbackService)
         {
@@ -42,7 +45,7 @@ namespace Dopamine.Services.Discord
         }
 
         /// <summary>
-        /// Registers the Discord client and the event handlers.
+        /// Registers the Last.FM client, Discord client and the event handlers.
         /// </summary>
         private void RegisterClient()
         {
@@ -65,6 +68,11 @@ namespace Dopamine.Services.Discord
             {
                 LogClient.Error($"Could not register cliente. Exception: {ex.Message}");
             }
+            
+            // TODO: Consider user OAuth if credentials cannot be provided externally.    
+            var apiKey = ConfigurationManager.AppSettings["LastFmApiKey"];
+            var apiSecret = ConfigurationManager.AppSettings["LastFmApiSecret"];
+            lastfmClient = new LastfmClient(apiKey, apiSecret);
         }
 
         /// <summary>
@@ -92,7 +100,7 @@ namespace Dopamine.Services.Discord
         /// <summary>
         /// Shows the current track's details.
         /// </summary>
-        private void ShowTrackDetails()
+        private async void ShowTrackDetails()
         {
             try
             {
@@ -101,13 +109,16 @@ namespace Dopamine.Services.Discord
                     return;
                 }
 
+                var response = await lastfmClient.Album.GetInfoAsync(playbackService.CurrentTrack.AlbumArtist, playbackService.CurrentTrack.AlbumTitle);
+                var imageUri = response?.Content?.Images?.Medium;
+
                 RichPresence presence = new RichPresence()
                 {
                     Details = this.playbackService.CurrentTrack.TrackTitle,
                     State = $"{ResourceUtils.GetString("Language_Discord_By")} {this.playbackService.CurrentTrack.ArtistName}",
                     Assets = new Assets()
                     {
-                        LargeImageKey = "icon",
+                        LargeImageKey = imageUri != null ? imageUri.AbsoluteUri : "icon",
                         LargeImageText = ResourceUtils.GetString("Language_Discord_Playing_With_Dopamine")
                     },
                 };
@@ -172,11 +183,12 @@ namespace Dopamine.Services.Discord
         }
 
         /// <summary>
-        /// Dispose of the Discord client.
+        /// Dispose of the Discord and LastFM client.
         /// </summary>
         ~RichPresenceService()
         {
             this.client.Dispose();
+            this.lastfmClient.Dispose();
         }
     }
 }
