@@ -17,13 +17,6 @@ jobs:
     runs-on: windows-2019
 
     steps:
-    - name: Datetime tag
-      id: date
-      uses: ccccmagicboy/get_datetime@master
-      with:
-        tz1: 'US'
-        tz2: 'Pacific'
-
     - uses: actions/checkout@v3
 
     - name: Setup MSBuild
@@ -40,11 +33,11 @@ jobs:
       uses: vimtor/action-zip@v1.2
       with:
         files: D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\Release\
-        dest: Dopamine.unstable.${{ steps.date.outputs.datetime_str }}.zip
+        dest: Dopamine.portable.unstable.${{ github.sha }}.zip
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: published_executable
-        path: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release\Dopamine.unstable.${{ steps.date.outputs.datetime_str }}.zip
+        path: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release\Dopamine.portable.unstable.${{ github.sha }}.zip
         if-no-files-found: error
