@@ -17,8 +17,12 @@ jobs:
     runs-on: windows-2019
 
     steps:
-    - id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: Datetime tag
+      id: date
+      uses: ccccmagicboy/get_datetime@master
+      with:
+        tz1: 'US'
+        tz2: 'Pacific'
 
     - uses: actions/checkout@v3
 
@@ -35,12 +39,12 @@ jobs:
     - name: Bundle Artifact
       uses: vimtor/action-zip@v1.2
       with:
-        files: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release
-        dest: Dopamine.unstable.${{steps.date.outcome.date}}.zip
+        files: D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\Release\
+        dest: Dopamine.unstable.${{ steps.date.outputs.datetime_str }}.zip
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: published_executable
-        path: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release\Dopamine.unstable.${{steps.date.outcome.date}}.zip
+        path: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release\Dopamine.unstable.${{ steps.date.outputs.datetime_str }}.zip
         if-no-files-found: error
