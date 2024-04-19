@@ -18,12 +18,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-    - name: Restore dependencies
-      run: nuget restore D:\a\dopamine-windows\Dopamine.sln
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+      
     - name: Build
-      run: msbuild D:\a\dopamine-windows\Dopamine.sln /p:Configuration=Release
+      run: msbuild Dopamine.sln /p:Configuration=Release
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
