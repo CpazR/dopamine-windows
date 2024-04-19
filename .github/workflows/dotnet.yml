@@ -14,17 +14,18 @@ jobs:
   build:
 
     environment: main
-    runs-on: windows-2022
+    runs-on: windows-2019
     
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '4.7.2'
     - name: Restore dependencies
-      run: dotnet restore
+      run: nuget restore D:\a\dopamine-windows\Dopamine.sln
     - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: msbuild D:\a\dopamine-windows\Dopamine.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: published_executable
+        path: D:\a\dopamine-windows\dopamine\bin\Release
