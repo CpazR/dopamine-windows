@@ -17,7 +17,7 @@ jobs:
     runs-on: windows-2019
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
     - name: Restore dependencies
@@ -25,7 +25,7 @@ jobs:
     - name: Build
       run: msbuild D:\a\dopamine-windows\Dopamine.sln /p:Configuration=Release
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v1.0.0
       with:
         name: published_executable
         path: D:\a\dopamine-windows\dopamine\bin\Release
