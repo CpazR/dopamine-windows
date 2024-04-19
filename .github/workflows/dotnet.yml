@@ -15,7 +15,7 @@ jobs:
 
     environment: main
     runs-on: windows-2019
-    
+
     steps:
     - uses: actions/checkout@v3
 
@@ -23,11 +23,14 @@ jobs:
       uses: microsoft/setup-msbuild@v1
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.5
-      
+
+    - name: Restore NuGet packages
+      run: nuget restore Dopamine.sln
     - name: Build
       run: msbuild Dopamine.sln /p:Configuration=Release
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: published_executable
-        path: D:\a\dopamine-windows\dopamine\bin\Release
+        path: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release
