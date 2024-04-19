@@ -13,10 +13,13 @@ on:
 jobs:
   build:
 
-    environment: main
+    # environment: main
     runs-on: windows-2019
 
     steps:
+    - id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
     - uses: actions/checkout@v3
 
     - name: Setup MSBuild
@@ -29,8 +32,15 @@ jobs:
     - name: Build
       run: msbuild Dopamine.sln /p:Configuration=Release
 
+    - name: Bundle Artifact
+      uses: vimtor/action-zip@v1.2
+      with:
+        files: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release
+        dest: Dopamine.NIGHTLY.${{steps.date.outcome.date}}.zip
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: published_executable
-        path: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release
+        path: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release\Dopamine.NIGHTLY.${{steps.date.outcome.date}}.zip
+        if-no-files-found: error
