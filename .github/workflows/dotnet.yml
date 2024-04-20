@@ -29,15 +29,15 @@ jobs:
     - name: Build
       run: msbuild Dopamine.sln /p:Configuration=Release
 
+    - name: Install zip action
+      uses: montudor/action-zip@v1
+
     - name: Bundle Artifact
-      uses: vimtor/action-zip@v1.2
-      with:
-        files: D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\Release\
-        dest: Dopamine.portable.unstable.${{ github.sha }}.zip
+      run: zip -qq -r Dopamine.portable.unstable.${{ github.sha }}.zip Release\
+      working-directory: D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: published_executable
-        path: D:\a\dopamine-windows\dopamine-windows\dopamine\bin\Release\Dopamine.portable.unstable.${{ github.sha }}.zip
-        if-no-files-found: error
+        path: Dopamine.portable.unstable.${{ github.sha }}.zip
