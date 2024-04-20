@@ -24,14 +24,14 @@ jobs:
       with:
         filepath: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\App.config'
         xpath: "//configuration/appSettings/add[@key='LastFmApiKey']/@value"
-        replace: '${{ secrets.LOST_FM_API_KEY }}'
+        replace: "${{ secrets.LOST_FM_API_KEY }}"
 
     - name: Inject secrets (2/2)
       uses: rvolo/xml-replace-action@v0.2
       with:
         filepath: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\App.config'
         xpath: "//configuration/appSettings/add[@key='LastFmApiSecret']/@value"
-        replace: '${{ secrets.LOST_FM_API_SECRET }}'
+        replace: "${{ secrets.LOST_FM_API_SECRET }}"
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
