@@ -26,6 +26,20 @@ jobs:
 
     - name: Restore NuGet packages
       run: nuget restore Dopamine.sln
+
+    - name: Inject secrets (1/2)
+      uses: rvolo/xml-replace-action@v0.2
+      with:
+        filepath: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\App.config'
+        xpath: "//configuration/appSettings/add[@key='LastFmApiKey']/@value"
+        replace: '${{ secrets.LOST_FM_API_KEY }}'
+
+    - name: Inject secrets (2/2)
+      uses: rvolo/xml-replace-action@v0.2
+      with:
+        filepath: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\App.config'
+        xpath: "//configuration/appSettings/add[@key='LastFmApiSecret']/@value"
+        replace: '${{ secrets.LOST_FM_API_SECRET }}'
       
     - name: Build
       run: |
@@ -33,16 +47,15 @@ jobs:
         echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
         msbuild Dopamine.sln /p:Configuration=Release
 
-
     - name: Bundle Artifact
       uses: thedoctor0/zip-release@0.7.5
       with:
         type: 'zip'
-        filename: 'Dopamine.portable.unstable.${{ env.SHORT_SHA }}.zip'
+        filename: 'artifact'
         directory: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\'
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: published_executable
-        path: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\Dopamine.portable.unstable.${{ env.SHORT_SHA }}.zip'
+        name: Dopamine.portable.unstable.${{ env.SHORT_SHA }}.zip
+        path: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\artifact'
