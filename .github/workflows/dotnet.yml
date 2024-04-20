@@ -29,12 +29,12 @@ jobs:
     - name: Build
       run: msbuild Dopamine.sln /p:Configuration=Release
 
-    - name: Install zip action
-      uses: montudor/action-zip@v1
-
     - name: Bundle Artifact
-      run: zip -qq -r Dopamine.portable.unstable.${{ github.sha }}.zip Release\
-      working-directory: D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'zip'
+        filename: 'Dopamine.portable.unstable.${{ github.sha }}.zip'
+        directory: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\bin\'
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
