@@ -19,14 +19,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.5
-
-    - name: Restore NuGet packages
-      run: nuget restore Dopamine.sln
-
     - name: Inject secrets (1/2)
       uses: rvolo/xml-replace-action@v0.2
       with:
@@ -40,7 +32,15 @@ jobs:
         filepath: 'D:\a\dopamine-windows\dopamine-windows\Dopamine\App.config'
         xpath: "//configuration/appSettings/add[@key='LastFmApiSecret']/@value"
         replace: '${{ secrets.LOST_FM_API_SECRET }}'
-      
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+
+    - name: Restore NuGet packages
+      run: nuget restore Dopamine.sln
+
     - name: Build
       run: |
         # Set a short SHA to keep file names short
